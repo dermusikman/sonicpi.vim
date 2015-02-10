@@ -117,11 +117,11 @@ class SonicPiWordlist
     @samples += %w(:ambi_glass_rub :ambi_haunted_hum :ambi_piano)
     @samples += %w(:ambi_lunar_land :ambi_dark_woosh :ambi_choir)
     @samples += %w(:bass_hit_c :bass_hard_c :bass_thick_c :bass_drop_c)
-    @samples += %w(:bass_woodsy_c :bass_voxy_c :bass_voxy_hit_c :bass_dnb_f,)
-    @samples += %w(:sn_dub, :sn_dolf, :sn_zome, :bd_ada, :bd_pure, :bd_808,)
-    @samples += %w(:bd_zum, :bd_gas, :bd_sone, :bd_haus, :bd_zome, :bd_boom,)
-    @samples += %w(:bd_klub, :bd_fat, :bd_tek, :loop_industrial, :loop_compus,)
-    @samples += %w(:loop_amen, :loop_amen_full, :loop_garzul,)
+    @samples += %w(:bass_woodsy_c :bass_voxy_c :bass_voxy_hit_c :bass_dnb_f)
+    @samples += %w(:sn_dub :sn_dolf :sn_zome :bd_ada :bd_pure :bd_808)
+    @samples += %w(:bd_zum :bd_gas :bd_sone :bd_haus :bd_zome :bd_boom)
+    @samples += %w(:bd_klub :bd_fat :bd_tek :loop_industrial :loop_compus)
+    @samples += %w(:loop_amen :loop_amen_full :loop_garzul)
     @samples += %w(:loop_mik)
   end
 
