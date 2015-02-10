@@ -2,7 +2,7 @@
 
 The sonicpi vim plugin requires the following:
 
-* An installation of [Sonic Pi 2.3+](http://www.sonic-pi.net/). (This requires [supercollider](http://audiosynth.com/) if you don't already have it.)
+* An installation of [Sonic Pi 2.3+](http://www.sonic-pi.net/). 
 
 * [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/) to interface with Sonic Pi. (If you have some other command-line driven method for interfacing with Sonic Pi, just adjust the plugin accordingly.)
 
