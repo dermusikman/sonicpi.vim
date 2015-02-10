@@ -8,7 +8,13 @@ The sonicpi vim plugin requires the following:
 
 ### Features
 
-Presently, the only significant features are the addition of the sonicpi filetype (autoloaded when opening a file ending in `.pi`), buggy autocompletion for Sonic Pi terms, and the use of Ruby syntax highlighting by default.
+There are two commands in Normal mode:
+
+`<leader>r` - send buffer to sonicpi
+
+`<leader>S` - send stop message to sonicpi
+
+Beyond that, the only significant features are the addition of the sonicpi filetype (autoloaded when opening a file ending in `.pi`), buggy autocompletion for Sonic Pi terms, and the use of Ruby syntax highlighting by default.
 
 ### TODO
 
