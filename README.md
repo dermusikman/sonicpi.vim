@@ -14,11 +14,13 @@ There are two commands in Normal mode:
 
 `<leader>S` - send stop message to sonicpi
 
-Beyond that, the only significant features are the addition of the sonicpi filetype (autoloaded when opening a file ending in `.pi`), buggy autocompletion for Sonic Pi terms, and the use of Ruby syntax highlighting by default.
+You can also autocomplete Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default).
+
+Beyond that, the only significant features are the addition of the sonicpi filetype (autoloaded when opening a file ending in `.pi`), ~~buggy~~ autocompletion for Sonic Pi terms, and the use of Ruby syntax highlighting by default.
 
 ### TODO
 
-* Fix autocomplete
+* ~~Fix autocomplete~~
 * Make contextual autocomplete (e.g., a list of samples follows `samples`)
 * Add movement for Sonic Pi style files, ala [ruby.vim](https://github.com/vim-ruby/vim-ruby/blob/master/doc/vim-ruby.txt)'s modifications
 * Extend Ruby syntax to incorporate Sonic Pi directives

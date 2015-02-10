@@ -1,4 +1,8 @@
 " Yanked from rubycomplete.vim
+function! sonicpicomplete#Init()
+  execute "ruby SonicPiWordlist.load_wordlist"
+endfunction
+
 function! sonicpicomplete#Complete(findstart, base)
      "findstart = 1 when we need to get the text length
     if a:findstart
@@ -7,7 +11,7 @@ function! sonicpicomplete#Complete(findstart, base)
         while idx > 0
             let idx -= 1
             let c = line[idx-1]
-            if c =~ '\w'
+            if c =~ '[0-9A-Za-z_:]'
                 continue
             elseif ! c =~ '\.'
                 idx = -1
@@ -21,103 +25,137 @@ function! sonicpicomplete#Complete(findstart, base)
     "findstart = 0 when we need to return the list of completions
     else
         let g:sonicpicomplete_completions = []
-        execute "ruby get_completions('" . a:base . "')"
+        execute "ruby SonicPiWordlist.get_completions('" . a:base . "')"
 "        if g:sonicpicomplete_completions == []
 "          g:sonicpicomplete_completions = rubycomplete#Complete(findstart, base) autoload/rubycomplete.vim
 "        endif
+        echom join(g:sonicpicomplete_completions, ', ')
         return g:sonicpicomplete_completions
     endif
 endfunction
 function! s:DefRuby()
 ruby << RUBYEOF
-# Populate the sonicpi word list
-# From server/sonicpi/lib/sonicpi/spiderapi.rb
-def get_sonicpi_words
-  sonicpi_words = []
-  sonicpi_words += %w(at bools choose comment cue dec density dice factor?)
-  sonicpi_words += %w(in_thread inc knit live_loop ndefine one_in print)
-  sonicpi_words += %w(puts quantise rand rand_i range rdist ring rrand)
-  sonicpi_words += %w(rrand_i rt shuffle sleep spread sync uncomment)
-  sonicpi_words += %w(use_bpm use_bpm_mul use_random_seed wait with_bpm)
-  sonicpi_words += %w(with_bpm_mul with_random_seed with_tempo)
-  sonicpi_words += %w(define defonce)
-#" From server/sonicpi/lib/sonicpi/mods/sound.rb
-  sonicpi_words += %w(__freesound __freesound_path chord chord_degree)
-  sonicpi_words += %w(complex_sampler_args? control degree)
-  sonicpi_words += %w(fetch_or_cache_sample_path find_sample_with_path)
-  sonicpi_words += %w(free_job_bus hz_to_midi job_bus job_fx_group)
-  sonicpi_words += %w(job_mixer job_proms_joiner job_synth_group)
-  sonicpi_words += %w(job_synth_proms_add job_synth_proms_rm)
-  sonicpi_words += %w(join_thread_and_subthreads kill_fx_job_group)
-  sonicpi_words += %w(kill_job_group load_sample load_samples)
-  sonicpi_words += %w(load_synthdefs midi_to_hz)
-  sonicpi_words += %w(normalise_and_resolve_synth_args normalise_args!)
-  sonicpi_words += %w(note note_info play play_chord play_pattern)
-  sonicpi_words += %w(play_pattern_timed recording_save)
-  sonicpi_words += %w(resolve_sample_symbol_path rest? sample)
-  sonicpi_words += %w(sample_buffer sample_duration sample_info)
-  sonicpi_words += %w(sample_loaded? sample_names scale)
-  sonicpi_words += %w(scale_time_args_to_bpm! set_control_delta!)
-  sonicpi_words += %w(set_current_synth set_mixer_hpf!)
-  sonicpi_words += %w(set_mixer_hpf_disable! set_mixer_lpf!)
-  sonicpi_words += %w(set_mixer_lpf_disable! set_sched_ahead_time!)
-  sonicpi_words += %w(set_volume! shutdown_job_mixer stop synth)
-  sonicpi_words += %w(trigger_chord trigger_fx trigger_inst)
-  sonicpi_words += %w(trigger_sampler trigger_specific_sampler)
-  sonicpi_words += %w(trigger_synth trigger_synth_with_resolved_args)
-  sonicpi_words += %w(use_arg_bpm_scaling use_arg_checks use_debug use_fx)
-  sonicpi_words += %w(use_merged_synth_defaults use_sample_bpm)
-  sonicpi_words += %w(use_sample_pack use_sample_pack_as use_synth)
-  sonicpi_words += %w(use_synth_defaults use_timing_warnings)
-  sonicpi_words += %w(use_transpose validate_if_necessary!)
-  sonicpi_words += %w(with_arg_bpm_scaling with_arg_checks with_debug)
-  sonicpi_words += %w(with_fx with_merged_synth_defaults with_sample_bpm)
-  sonicpi_words += %w(with_sample_pack with_sample_pack_as with_synth)
-  sonicpi_words += %w(with_synth_defaults with_timing_warnings with_transpose)
-# Synths from server/sonicpi/lib/sonicpi/synthinfo.rb
-  sonicpi_words += %w(:dull_bell :pretty_bell :beep :sine :saw :pulse)
-  sonicpi_words += %w(:square :tri :dsaw :fm :mod_fm :mod_saw :mod_dsaw)
-  sonicpi_words += %w(:mod_sine :mod_beep :mod_tri :mod_pulse :tb303)
-  sonicpi_words += %w(:supersaw :prophet :zawa :dark_ambience :growl :wood)
-  sonicpi_words += %w(:dark_sea_horn :singer :sound_in :noise :pnoise)
-  sonicpi_words += %w(:bnoise :gnoise :cnoise)
-# FX from server/sonicpi/lib/sonicpi/synthinfo.rb
-  sonicpi_words += %w(:bitcrusher :reverb)
-  sonicpi_words += %w(:level :echo :slicer :wobble :ixi_techno)
-  sonicpi_words += %w(:compressor :rlpf :nrlpf :rhpf :nrhpf)
-  sonicpi_words += %w(:hpf :nhpf :lpf :nlpf :normaliser)
-  sonicpi_words += %w(:distortion :pan :bpf :nbpf :rbpf)
-  sonicpi_words += %w(:nrbpf :ring :flange)
-# Samples from server/sonicpi/lib/sonicpi/synthinfo.rb
-  sonicpi_words += %w(:drum_heavy_kick :drum_tom_mid_soft :drum_tom_mid_hard)
-  sonicpi_words += %w(:drum_tom_lo_soft :drum_tom_lo_hard :drum_tom_hi_soft)
-  sonicpi_words += %w(:drum_tom_hi_hard :drum_splash_soft :drum_splash_hard)
-  sonicpi_words += %w(:drum_snare_soft :drum_snare_hard :drum_cymbal_soft)
-  sonicpi_words += %w(:drum_cymbal_hard :drum_cymbal_open :drum_cymbal_closed)
-  sonicpi_words += %w(:drum_cymbal_pedal :drum_bass_soft :drum_bass_hard)
-  sonicpi_words += %w(:elec_triangle :elec_snare :elec_lo_snare :elec_hi_snare)
-  sonicpi_words += %w(:elec_mid_snare :elec_cymbal :elec_soft_kick)
-  sonicpi_words += %w(:elec_filt_snare :elec_fuzz_tom :elec_chime :elec_bong)
-  sonicpi_words += %w(:elec_twang :elec_wood :elec_pop :elec_beep :elec_blip)
-  sonicpi_words += %w(:elec_blip2 :elec_ping :elec_bell :elec_flip :elec_tick)
-  sonicpi_words += %w(:elec_hollow_kick :elec_twip :elec_plip :elec_blup)
-  sonicpi_words += %w(:guit_harmonics :guit_e_fifths :guit_e_slide :guit_em9)
-  sonicpi_words += %w(:misc_burp :perc_bell :perc_snap :perc_snap2)
-  sonicpi_words += %w(:ambi_soft_buzz :ambi_swoosh :ambi_drone :ambi_glass_hum)
-  sonicpi_words += %w(:ambi_glass_rub :ambi_haunted_hum :ambi_piano)
-  sonicpi_words += %w(:ambi_lunar_land :ambi_dark_woosh :ambi_choir)
-  sonicpi_words += %w(:bass_hit_c :bass_hard_c :bass_thick_c :bass_drop_c)
-  sonicpi_words += %w(:bass_woodsy_c :bass_voxy_c :bass_voxy_hit_c :bass_dnb_f)
-  sonicpi_words += %w(:sn_dub :sn_dolf :sn_zome :bd_ada :bd_pure :bd_808)
-  sonicpi_words += %w(:bd_zum :bd_gas :bd_sone :bd_haus :bd_zome :bd_boom)
-  sonicpi_words += %w(:bd_klub :bd_fat :bd_tek :loop_industrial :loop_compus)
-  sonicpi_words += %w(:loop_amen :loop_amen_full :loop_garzul)
-  sonicpi_words += %w(:loop_mik)
-  sonicpi_words
-end
+class SonicPiWordlist
+  attr_reader :directives, :synths, :fx, :samples
 
-def get_completions(base)
-  get_sonicpi_words.grep(/#{base}/)
+  def initialize
+# From server/sonicpi/lib/sonicpi/spiderapi.rb
+    @directives = []
+    @directives += %w(at bools choose comment cue dec density dice factor?)
+    @directives += %w(in_thread inc knit live_loop ndefine one_in print)
+    @directives += %w(puts quantise rand rand_i range rdist ring rrand)
+    @directives += %w(rrand_i rt shuffle sleep spread sync uncomment)
+    @directives += %w(use_bpm use_bpm_mul use_random_seed wait with_bpm)
+    @directives += %w(with_bpm_mul with_random_seed with_tempo)
+    @directives += %w(define defonce)
+# From server/sonicpi/lib/sonicpi/mods/sound.rb
+    @directives += %w(__freesound __freesound_path chord chord_degree)
+    @directives += %w(complex_sampler_args? control degree)
+    @directives += %w(fetch_or_cache_sample_path find_sample_with_path)
+    @directives += %w(free_job_bus hz_to_midi job_bus job_fx_group)
+    @directives += %w(job_mixer job_proms_joiner job_synth_group)
+    @directives += %w(job_synth_proms_add job_synth_proms_rm)
+    @directives += %w(join_thread_and_subthreads kill_fx_job_group)
+    @directives += %w(kill_job_group load_sample load_samples)
+    @directives += %w(load_synthdefs midi_to_hz)
+    @directives += %w(normalise_and_resolve_synth_args normalise_args!)
+    @directives += %w(note note_info play play_chord play_pattern)
+    @directives += %w(play_pattern_timed recording_save)
+    @directives += %w(resolve_sample_symbol_path rest? sample)
+    @directives += %w(sample_buffer sample_duration sample_info)
+    @directives += %w(sample_loaded? sample_names scale)
+    @directives += %w(scale_time_args_to_bpm! set_control_delta!)
+    @directives += %w(set_current_synth set_mixer_hpf!)
+    @directives += %w(set_mixer_hpf_disable! set_mixer_lpf!)
+    @directives += %w(set_mixer_lpf_disable! set_sched_ahead_time!)
+    @directives += %w(set_volume! shutdown_job_mixer stop synth)
+    @directives += %w(trigger_chord trigger_fx trigger_inst)
+    @directives += %w(trigger_sampler trigger_specific_sampler)
+    @directives += %w(trigger_synth trigger_synth_with_resolved_args)
+    @directives += %w(use_arg_bpm_scaling use_arg_checks use_debug use_fx)
+    @directives += %w(use_merged_synth_defaults use_sample_bpm)
+    @directives += %w(use_sample_pack use_sample_pack_as use_synth)
+    @directives += %w(use_synth_defaults use_timing_warnings)
+    @directives += %w(use_transpose validate_if_necessary!)
+    @directives += %w(with_arg_bpm_scaling with_arg_checks with_debug)
+    @directives += %w(with_fx with_merged_synth_defaults with_sample_bpm)
+    @directives += %w(with_sample_pack with_sample_pack_as with_synth)
+    @directives += %w(with_synth_defaults with_timing_warnings with_transpose)
+# Synths from server/sonicpi/lib/sonicpi/synthinfo.rb
+    @synths = []
+    @synths += %w(:dull_bell :pretty_bell :beep :sine :saw :pulse)
+    @synths += %w(:square :tri :dsaw :fm :mod_fm :mod_saw :mod_dsaw)
+    @synths += %w(:mod_sine :mod_beep :mod_tri :mod_pulse :tb303)
+    @synths += %w(:supersaw :prophet :zawa :dark_ambience :growl :wood)
+    @synths += %w(:dark_sea_horn :singer :sound_in :noise :pnoise)
+    @synths += %w(:bnoise :gnoise :cnoise)
+# FX from server/sonicpi/lib/sonicpi/synthinfo.rb
+    @fx = []
+    @fx += %w(:bitcrusher :reverb)
+    @fx += %w(:level :echo :slicer :wobble :ixi_techno)
+    @fx += %w(:compressor :rlpf :nrlpf :rhpf :nrhpf)
+    @fx += %w(:hpf :nhpf :lpf :nlpf :normaliser)
+    @fx += %w(:distortion :pan :bpf :nbpf :rbpf)
+    @fx += %w(:nrbpf :ring :flange)
+# Samples from server/sonicpi/lib/sonicpi/synthinfo.rb
+    @samples = []
+    @samples += %w(:drum_heavy_kick :drum_tom_mid_soft :drum_tom_mid_hard)
+    @samples += %w(:drum_tom_lo_soft :drum_tom_lo_hard :drum_tom_hi_soft)
+    @samples += %w(:drum_tom_hi_hard :drum_splash_soft :drum_splash_hard)
+    @samples += %w(:drum_snare_soft :drum_snare_hard :drum_cymbal_soft)
+    @samples += %w(:drum_cymbal_hard :drum_cymbal_open :drum_cymbal_closed)
+    @samples += %w(:drum_cymbal_pedal :drum_bass_soft :drum_bass_hard)
+    @samples += %w(:elec_triangle :elec_snare :elec_lo_snare :elec_hi_snare)
+    @samples += %w(:elec_mid_snare :elec_cymbal :elec_soft_kick)
+    @samples += %w(:elec_filt_snare :elec_fuzz_tom :elec_chime :elec_bong)
+    @samples += %w(:elec_twang :elec_wood :elec_pop :elec_beep :elec_blip)
+    @samples += %w(:elec_blip2 :elec_ping :elec_bell :elec_flip :elec_tick)
+    @samples += %w(:elec_hollow_kick :elec_twip :elec_plip :elec_blup)
+    @samples += %w(:guit_harmonics :guit_e_fifths :guit_e_slide :guit_em9)
+    @samples += %w(:misc_burp :perc_bell :perc_snap :perc_snap2)
+    @samples += %w(:ambi_soft_buzz :ambi_swoosh :ambi_drone :ambi_glass_hum)
+    @samples += %w(:ambi_glass_rub :ambi_haunted_hum :ambi_piano)
+    @samples += %w(:ambi_lunar_land :ambi_dark_woosh :ambi_choir)
+    @samples += %w(:bass_hit_c :bass_hard_c :bass_thick_c :bass_drop_c)
+    @samples += %w(:bass_woodsy_c :bass_voxy_c :bass_voxy_hit_c :bass_dnb_f,)
+    @samples += %w(:sn_dub, :sn_dolf, :sn_zome, :bd_ada, :bd_pure, :bd_808,)
+    @samples += %w(:bd_zum, :bd_gas, :bd_sone, :bd_haus, :bd_zome, :bd_boom,)
+    @samples += %w(:bd_klub, :bd_fat, :bd_tek, :loop_industrial, :loop_compus,)
+    @samples += %w(:loop_amen, :loop_amen_full, :loop_garzul,)
+    @samples += %w(:loop_mik)
+  end
+
+  def self.get_completions(base)
+    SonicPiWordlist.new.get_completions base
+  end
+
+  def get_completions(base)
+    completions = []
+    completions += @directives.grep(/^#{base}/)
+    completions += @synths.grep(/^#{base}/)
+    completions += @fx.grep(/^#{base}/)
+    completions += @samples.grep(/^#{base}/)
+    list = completions.join('","')
+    list.gsub!(/^(.)/, '"\1')
+    list.gsub!(/(.)$/, '\1"')
+    VIM::command("call extend(g:sonicpicomplete_completions, [%s])" % list)
+  end
+
+  def self.get_synths(base)
+    SonicPiWordlist.new.synths.grep(/^#{base}/)
+  end
+
+  def self.get_fx(base)
+    SonicPiWordlist.new.fx.grep(/^#{base}/)
+  end
+
+  def self.get_samples(base)
+    SonicPiWordlist.new.samples.grep(/^#{base}/)
+  end
+
+  def self.get_directives(base)
+    SonicPiWordlist.new.directives.grep(/^#{base}/)
+  end
 end
 RUBYEOF
 endfunction
