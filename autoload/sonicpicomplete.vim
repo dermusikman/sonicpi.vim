@@ -131,26 +131,36 @@ class SonicPiWordlist
     completions += @synths.grep(/^#{base}/)
     completions += @fx.grep(/^#{base}/)
     completions += @samples.grep(/^#{base}/)
-    list = completions.join('","')
-    list.gsub!(/^(.)/, '"\1')
-    list.gsub!(/(.)$/, '\1"')
+    list = array2list(completions)
     VIM::command("call extend(g:sonicpicomplete_completions, [%s])" % list)
   end
 
   def self.get_synths(base)
-    SonicPiWordlist.new.synths.grep(/^#{base}/)
+    list = array2list(SonicPiWordlist.new.synths.grep(/^#{base}/))
+    list
   end
 
   def self.get_fx(base)
-    SonicPiWordlist.new.fx.grep(/^#{base}/)
+    list = array2list(SonicPiWordlist.new.fx.grep(/^#{base}/))
+    list
   end
 
   def self.get_samples(base)
-    SonicPiWordlist.new.samples.grep(/^#{base}/)
+    list = array2list(SonicPiWordlist.new.samples.grep(/^#{base}/))
+    list
   end
 
   def self.get_directives(base)
-    SonicPiWordlist.new.directives.grep(/^#{base}/)
+    list = array2list(SonicPiWordlist.new.directives.grep(/^#{base}/))
+    list
+  end
+
+  private
+  def array2list(array)
+    list = array.join('","')
+    list.gsub!(/^(.)/, '"\1')
+    list.gsub!(/(.)$/, '\1"')
+    list
   end
 end
 RUBYEOF
