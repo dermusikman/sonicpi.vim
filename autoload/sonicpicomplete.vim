@@ -26,10 +26,6 @@ function! sonicpicomplete#Complete(findstart, base)
     else
         let g:sonicpicomplete_completions = []
         execute "ruby SonicPiWordlist.get_completions('" . a:base . "')"
-"        if g:sonicpicomplete_completions == []
-"          g:sonicpicomplete_completions = rubycomplete#Complete(findstart, base) autoload/rubycomplete.vim
-"        endif
-        echom join(g:sonicpicomplete_completions, ', ')
         return g:sonicpicomplete_completions
     endif
 endfunction
