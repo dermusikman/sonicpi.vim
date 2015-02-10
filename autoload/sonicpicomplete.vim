@@ -92,7 +92,7 @@ class SonicPiWordlist
     @fx += %w(:compressor :rlpf :nrlpf :rhpf :nrhpf)
     @fx += %w(:hpf :nhpf :lpf :nlpf :normaliser)
     @fx += %w(:distortion :pan :bpf :nbpf :rbpf)
-    @fx += %w(:nrbpf :ring :flange)
+    @fx += %w(:nrbpf :ring :flanger)
 # Samples from server/sonicpi/lib/sonicpi/synthinfo.rb
     @samples = []
     @samples += %w(:drum_heavy_kick :drum_tom_mid_soft :drum_tom_mid_hard)
