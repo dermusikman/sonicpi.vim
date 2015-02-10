@@ -119,6 +119,58 @@ class SonicPiWordlist
     @samples += %w(:bd_klub :bd_fat :bd_tek :loop_industrial :loop_compus)
     @samples += %w(:loop_amen :loop_amen_full :loop_garzul)
     @samples += %w(:loop_mik)
+
+# Contexts in which we may want particular completions
+    @context = {}
+# Synths from server/sonicpi/lib/sonicpi/synthinfo.rb
+    @context[:base_sound] = [
+      :amp, :amp_slide, :pan, :pan_slide, :attack, :sustain, :release
+    ]
+    @context[:base_pulse] = [
+      :pulse_width, :pulse_width_slide, :pulse_width_slide_curve, :pulse_width_slide_shape
+    ]
+    @context[:base_phase] = [
+      :phase, :phase_offset, :phase_slide, :phase_slide_curve, :phase_slide_shape
+    ]
+    @context[:base_filter] = [
+      :cutoff, :cutoff_slide, :cutoff_slide_curve, :cutoff_slide_shape
+    ]
+    @context[:base_res] = [
+      :res, :res_slide, :res_slide_curve, :res_slide_shape
+    ]
+    @context[:base_detuned] = [
+      :detune, :detune_slide, :detune_slide_curve, :detune_slide_shape
+    ]
+    @context[:base_modulated] = [
+      :mod_invert_wave, 
+      :mod_phase, :mod_phase_offset, :mod_phase_slide, :mod_phase_slide_curve, :mod_phase_slide_shape,
+      :mod_pulse_width, :mod_pulse_width_slide, :mod_pulse_width_slide_curve, :mod_pulse_width_slide_shape,
+      :mod_range, :mod_range_slide, :mod_range_slide_curve, :mod_range_slide_shape,
+      :mod_wave
+    ]
+    @context[:base_synth] = @context[:base_sound] + [
+      :amp_slide_curve, :amp_slide_shape,
+      :attack_level,
+      :decay,
+      :env_curve,
+      :note_slide_curve, :note_slide_shape,
+      :pan_slide_curve, :pan_slide_shape,
+      :sustain_level
+    ]
+    @context[:base_ambient] = @context[:base_synth] + [
+      :freq_addition, :ring_multiplier, :reverb_time, :room_size
+    ]
+    @context[:fm] = @context[:base_synth] + [
+      :divisor, :divisor_slide, :divisor_curve, :divisor_shape,
+      :depth, :depth_slide, :depth_slide_curve, :depth_slide_shape
+    ]
+    @context[:noise] = @context[:base_synth] + @context[:base_filter] + @context[:base_res]
+    @context[:sample] = @context[:base_synth] + [
+      :finish, :rate, :start
+    ]
+    @context[:prophet] = @context[:base_synth] + @context[:base_filter] + @context[:base_res]
+    @context[:zawa] = @context[:base_synth] + @context[:base_pulse] + @context[:base_phase] + @context[:base_modulated]
+# XXX Next up: FX
   end
 
   def self.get_completions(base)
