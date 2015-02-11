@@ -10,21 +10,19 @@ The sonicpi vim plugin requires the following:
 
 ### Features
 
-There are two commands in Normal mode:
+The plugin enables itself when the Ruby filetype is initiated (`let g:sonicpi_enabled = 0` to disable), and provides the following features:
 
-`<leader>r` - send buffer to sonicpi
+* `<leader>r` - send buffer to sonicpi
 
-`<leader>S` - send stop message to sonicpi
+* `<leader>S` - send stop message to sonicpi
 
-You can also autocomplete Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default).
-
-Beyond that, the only significant features are the addition of the sonicpi filetype (autoloaded when opening a file ending in `.pi`), ~~buggy~~ autocompletion for Sonic Pi terms, and the use of Ruby syntax highlighting by default.
+* Autocompletion of Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default).
 
 ### TODO
 
 * ~~Fix autocomplete~~
 * Make contextual autocomplete (e.g., a list of samples follows `samples`)
-* Add movement for Sonic Pi style files, ala [ruby.vim](https://github.com/vim-ruby/vim-ruby/blob/master/doc/vim-ruby.txt)'s modifications
-* Extend Ruby syntax to incorporate Sonic Pi directives
+* ~~Add movement for Sonic Pi style files, ala [ruby.vim](https://github.com/vim-ruby/vim-ruby/blob/master/doc/vim-ruby.txt)'s modifications~~ (Now we stay in the Ruby filetype)
+* Extend Ruby syntax to incorporate Sonic Pi directives :star
 
 **NB**: This is my first plugin, and a work in progress. Please submit requests, recommendations, patches, and bug fixes if you find them.
