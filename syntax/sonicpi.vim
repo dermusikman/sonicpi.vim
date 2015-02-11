@@ -1,10 +1,10 @@
-if exists("b:current_syntax")
-  finish
-endif
+"if exists("b:current_syntax")
+"  finish
+"endif
 
 " Import and extend Ruby syntax
 "  see :help :syn-include
-runtime! syntax/ruby.vim
+":runtime! syntax/ruby.vim
 "syntax include @rubyNotTop syntax/ruby.vim
 " syntax cluster SonicPi contains=@rubyNotTop
 
@@ -53,4 +53,4 @@ syntax keyword sonicpiKeyword with_synth_defaults with_timing_warnings with_tran
 highlight link sonicpiKeyword Keyword
 highlight link sonicpiDefine Function
 
-unlet b:current_syntax
+":unlet b:current_syntax
