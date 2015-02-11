@@ -18,6 +18,7 @@ function! sonicpi#detect()
   if s:activep == 0 && expand(&filetype) == 'ruby' && g:sonicpi_enabled
     call s:load_keymaps()
     call s:load_autocomplete()
+    call s:load_syntax()
   endif
 endfunction
 
@@ -44,4 +45,9 @@ endfunction
 function! s:load_keymaps()
   nnoremap <leader>r :silent w !sonic_pi<CR>
   nnoremap <leader>S :call system("sonic_pi stop")<CR>
+endfunction
+
+" Extend Ruby syntax to include Sonic Pi terms
+function! s:load_syntax()
+  runtime! syntax/sonicpi.vim
 endfunction
