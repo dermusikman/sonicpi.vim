@@ -1,10 +1,10 @@
-if exists("b:current_syntax")
-  finish
-endif
+"if exists("b:current_syntax")
+"  finish
+"endif
 
 " Import and extend Ruby syntax
 "  see :help :syn-include
-runtime! syntax/ruby.vim
+":runtime! syntax/ruby.vim
 "syntax include @rubyNotTop syntax/ruby.vim
 " syntax cluster SonicPi contains=@rubyNotTop
 
@@ -50,4 +50,4 @@ runtime! syntax/ruby.vim
 "syntax keyword rubyKeyword with_sample_pack with_sample_pack_as with_synth 
 "syntax keyword rubyKeyword with_synth_defaults with_timing_warnings with_transpose 
 
-unlet b:current_syntax
+":unlet b:current_syntax

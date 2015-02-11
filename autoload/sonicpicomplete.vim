@@ -1,8 +1,3 @@
-" Yanked from rubycomplete.vim
-function! sonicpicomplete#Init()
-  execute "ruby SonicPiWordlist.load_wordlist"
-endfunction
-
 function! sonicpicomplete#Complete(findstart, base)
      "findstart = 1 when we need to get the text length
     if a:findstart
