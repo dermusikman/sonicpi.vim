@@ -117,7 +117,7 @@ class SonicPiWordlist
 
 # Contexts in which we may want particular completions
     @context = {}
-# Synths from server/sonicpi/lib/sonicpi/synthinfo.rb
+    # Base contexts from which sound attributes are built
     @context[:base_sound] = [
       :amp, :amp_slide, :pan, :pan_slide, :attack, :sustain, :release
     ]
@@ -155,15 +155,50 @@ class SonicPiWordlist
     @context[:base_ambient] = @context[:base_synth] + [
       :freq_addition, :ring_multiplier, :reverb_time, :room_size
     ]
+    # Synths - grouped by related base function
+    @context[:dull_bell] = @context[:base_synth]
+    @context[:pretty_bell] = @context[:dull_bell]
+
+    @context[:beep] = @context[:base_synth]
+    @context[:saw] = @context[:beep]
+    @context[:supersaw] = @context[:saw] + @context[:base_filter] + @context[:base_res]
+    @context[:mod_saw] = @context[:saw] + @context[:base_filter] + @context[:base_modulated]
+    @context[:mod_sine] = @context[:base_synth] + @context[:filter] + @context[:base_modulated]
+
+    @context[:square] = @context[:base_synth] + @context[:base_filter]
+    @context[:pulse] = @context[:square] + @context[:base_pulse]
+    @context[:mod_pulse] = @context[:pulse] + @context[:base_modulated]
+    @context[:tri] = @context[:pulse]
+    @context[:mod_tri] = @context[:tri] + @context[:base_modulated]
+
+    @context[:dsaw] = @context[:base_synth] + @context[:base_filter] + @context[:base_detuned]
+    @context[:mod_dsaw] = @context[:dsaw] + @context[:base_modulated]
+
     @context[:fm] = @context[:base_synth] + [
       :divisor, :divisor_slide, :divisor_curve, :divisor_shape,
       :depth, :depth_slide, :depth_slide_curve, :depth_slide_shape
     ]
+    @context[:mod_fm] = @context[:fm] + @context[:base_modulated]
+
     @context[:noise] = @context[:base_synth] + @context[:base_filter] + @context[:base_res]
+    @context[:gnoise] = @context[:noise]
+    @context[:bnoise] = @context[:noise]
+    @context[:pnoise] = @context[:noise]
+    @context[:cnoise] = @context[:noise]
+
     @context[:sample] = @context[:base_synth] + [
       :finish, :rate, :start
     ]
+
+    @context[:growl] = @context[:base_synth]
+    @context[:dark_ambience] = @context[:base_synth] + [
+      :freq_addition, :room_size, :reverb_time, :ring_multipler #(sic)
+    ]
+    @context[:dark_sea_horn] = @context[:base_synth]
+    @context[:singer] = @context[:base_synth]
+    @context[:wood] = @context[:base_synth]
     @context[:prophet] = @context[:base_synth] + @context[:base_filter] + @context[:base_res]
+    @context[:tb303] = @context[:base_synth] + @context[:base_filter] + @context[:base_pulse] + @context[:base_res]
     @context[:zawa] = @context[:base_synth] + @context[:base_pulse] + @context[:base_phase] + @context[:base_modulated]
 # XXX Next up: FX
   end
