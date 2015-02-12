@@ -16,15 +16,14 @@ The plugin enables itself when the Ruby filetype is initiated (`let g:sonicpi_en
 
 * `<leader>S` - send stop message to sonicpi
 
-* Autocompletion of Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default).
+* Contextual autocompletion of Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default). That is, if you have `synth :zawa,` in the line, omnicomplete will provide parameter names for `:zawa`!
 
 * Extension of Ruby syntax to include Sonic Pi terms
 
 ### TODO
 
 * ~~Fix autocomplete~~
-* Make contextual autocomplete (e.g., a list of samples follows `samples`)
+* ~~Make contextual autocomplete (e.g., a list of samples follows `samples`)~~
 * ~~Add movement for Sonic Pi style files, ala [ruby.vim](https://github.com/vim-ruby/vim-ruby/blob/master/doc/vim-ruby.txt)'s modifications~~ (Now we stay in the Ruby filetype)
 * ~~Extend Ruby syntax to incorporate Sonic Pi directives~~
-
-**NB**: This is my first plugin, and a work in progress. Please submit requests, recommendations, patches, and bug fixes if you find them.
+* Update for Sonic Pi 2.4
