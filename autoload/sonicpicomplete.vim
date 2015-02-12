@@ -163,7 +163,7 @@ class SonicPiWordlist
     @context[:saw] = @context[:beep]
     @context[:supersaw] = @context[:saw] + @context[:base_filter] + @context[:base_res]
     @context[:mod_saw] = @context[:saw] + @context[:base_filter] + @context[:base_modulated]
-    @context[:mod_sine] = @context[:base_synth] + @context[:filter] + @context[:base_modulated]
+    @context[:mod_sine] = @context[:base_synth] + @context[:base_filter] + @context[:base_modulated]
 
     @context[:square] = @context[:base_synth] + @context[:base_filter]
     @context[:pulse] = @context[:square] + @context[:base_pulse]
