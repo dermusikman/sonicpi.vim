@@ -127,9 +127,11 @@ class SonicPiWordlist
     @synths += %w(:dull_bell :pretty_bell :beep :sine :saw :pulse)
     @synths += %w(:square :tri :dsaw :fm :mod_fm :mod_saw :mod_dsaw)
     @synths += %w(:mod_sine :mod_beep :mod_tri :mod_pulse :tb303)
-    @synths += %w(:supersaw :prophet :zawa :dark_ambience :growl :wood)
-    @synths += %w(:dark_sea_horn :singer :sound_in :noise :pnoise)
+    @synths += %w(:supersaw :prophet :zawa :dark_ambience :growl)
+    @synths += %w(:singer :sound_in :noise :pnoise)
     @synths += %w(:bnoise :gnoise :cnoise)
+    # dark_sea_horn and wood have been removed in 2.4 - come back soon!
+    #@synths += %w(:dark_sea_horn :wood)
 # FX from server/sonicpi/lib/sonicpi/synthinfo.rb
     @fx = []
     @fx += %w(:bitcrusher :reverb)
@@ -247,9 +249,11 @@ class SonicPiWordlist
     @context['dark_ambience'] = @context['base_synth'] + [
       'freq_addition', 'room_size', 'reverb_time', 'ring_multipler' #(sic)
     ]
-    @context['dark_sea_horn'] = @context['base_synth']
+    # dark_sea_horn has been removed in 2.4 - come back soon!
+    #@context['dark_sea_horn'] = @context['base_synth']
     @context['singer'] = @context['base_synth']
-    @context['wood'] = @context['base_synth']
+    # wood has been removed in 2.4...
+    #@context['wood'] = @context['base_synth']
     @context['prophet'] = @context['base_synth'] + @context['base_filter'] + @context['base_res']
     @context['tb303'] = @context['base_synth'] + @context['base_filter'] + @context['base_pulse'] + @context['base_res']
     @context['zawa'] = @context['base_synth'] + @context['base_pulse'] + @context['base_phase'] + @context['base_modulated']
