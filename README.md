@@ -10,7 +10,7 @@ The sonicpi vim plugin requires the following:
 
 ### Features
 
-The plugin enables itself when the Ruby filetype is initiated (`let g:sonicpi_enabled = 0` to disable), and provides the following features:
+The plugin enables itself when Sonic Pi is running and the Ruby filetype is initiated (`let g:sonicpi_enabled = 0` to disable), and provides the following features:
 
 * `<leader>r` - send buffer to sonicpi
 
@@ -19,6 +19,16 @@ The plugin enables itself when the Ruby filetype is initiated (`let g:sonicpi_en
 * Contextual autocompletion of Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default). That is, if you have `synth :zawa,` in the line, omnicomplete will provide parameter names for `:zawa`, et al!
 
 * Extension of Ruby syntax to include Sonic Pi terms
+
+### Installation
+
+Prerequisites: [Sonic Pi 2.3+](http://www.sonic-pi.net/), [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/)
+
+If you use [pathogen](https://github.com/tpope/vim-pathogen) (and you should), simply clone this repo into `~/.vim/bundle/` like so:
+
+`git clone https://github.com/dermusikman/sonicpi.vim.git`
+
+Whenever Sonic Pi is running, and you haven't disabled the `g:sonicpi_enabled` flag in your configs, the plugin will activate. Otherwise, it's a normal Ruby session!
 
 ### TODO
 
