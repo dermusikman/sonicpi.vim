@@ -1,3 +1,52 @@
+function! sonicpicomplete#GetContext(base)
+  let s:line = getline('.')
+  let s:synth_re = '\v(use_synth|synth|with_synth|set_current_synth)\s+'
+  let s:fx_re = '\vwith_fx\s+'
+  let s:sample_re = '\vsample\s+'
+
+  if s:line =~ s:synth_re.':\w+\s*,\s*'
+    " Synth is defined; we need the context
+    let directive_end = matchend(s:line, 'synth')
+    let sound = matchstr(s:line, '\v\w+', directive_end, 1)
+    execute 'ruby SonicPiWordlist.get_context("'.sound.'","'.a:base.'")'
+    return
+  endif
+
+  if s:line =~ s:synth_re
+    " Synth is not defined; we need the synth
+    execute 'ruby SonicPiWordlist.get_synths("'.a:base.'")'
+    return
+  endif
+
+  if s:line =~ s:fx_re.':\w+\s*,\s*'
+    " FX is defined; we need the context
+    let directive_end = matchend(s:line, 'fx')
+    let sound = matchstr(s:line, '\v\w+', directive_end, 1)
+    execute 'ruby SonicPiWordlist.get_context("'.sound.'","'.a:base.'")'
+    return
+  endif
+
+  if s:line =~ s:fx_re
+    " FX is not defined; we need the FX
+    execute 'ruby SonicPiWordlist.get_fx("'.a:base.'")'
+    return
+  endif
+
+  if s:line =~ s:sample_re.':\w+\s*,\s*'
+    " Sample is defined; we need the context
+    execute 'ruby SonicPiWordlist.get_context("sample","'.a:base.'")'
+    return
+  endif
+
+  if s:line =~ s:sample_re
+    execute 'ruby SonicPiWordlist.get_samples("'.a:base.'")'
+    return
+  endif
+
+  " If we get to this point, we're looking for directives
+  execute 'ruby SonicPiWordlist.get_directives("'.a:base.'")'
+endfunction
+
 function! sonicpicomplete#Complete(findstart, base)
      "findstart = 1 when we need to get the text length
     if a:findstart
@@ -6,7 +55,7 @@ function! sonicpicomplete#Complete(findstart, base)
         while idx > 0
             let idx -= 1
             let c = line[idx-1]
-            if c =~ '[0-9A-Za-z_:]'
+            if c =~ '\v[a-z0-9_:]'
                 continue
             elseif ! c =~ '\.'
                 idx = -1
@@ -19,15 +68,16 @@ function! sonicpicomplete#Complete(findstart, base)
         return idx
     "findstart = 0 when we need to return the list of completions
     else
+      echom a:base
         let g:sonicpicomplete_completions = []
-        execute "ruby SonicPiWordlist.get_completions('" . a:base . "')"
+        call sonicpicomplete#GetContext(a:base)
         return g:sonicpicomplete_completions
     endif
 endfunction
 function! s:DefRuby()
 ruby << RUBYEOF
 class SonicPiWordlist
-  attr_reader :directives, :synths, :fx, :samples
+  attr_reader :directives, :synths, :fx, :samples, :context
 
   def initialize
 # From server/sonicpi/lib/sonicpi/spiderapi.rb
@@ -87,7 +137,7 @@ class SonicPiWordlist
     @fx += %w(:compressor :rlpf :nrlpf :rhpf :nrhpf)
     @fx += %w(:hpf :nhpf :lpf :nlpf :normaliser)
     @fx += %w(:distortion :pan :bpf :nbpf :rbpf)
-    @fx += %w(:nrbpf :ring :flange)
+    @fx += %w(:nrbpf :ring :flanger)
 # Samples from server/sonicpi/lib/sonicpi/synthinfo.rb
     @samples = []
     @samples += %w(:drum_heavy_kick :drum_tom_mid_soft :drum_tom_mid_hard)
@@ -114,40 +164,223 @@ class SonicPiWordlist
     @samples += %w(:bd_klub :bd_fat :bd_tek :loop_industrial :loop_compus)
     @samples += %w(:loop_amen :loop_amen_full :loop_garzul)
     @samples += %w(:loop_mik)
+
+# Contexts in which we may want particular completions
+    @context = {}
+    # Base contexts from which sound attributes are built
+    @context['base_sound'] = [
+      'amp', 'amp_slide', 'pan', 'pan_slide', 'attack', 'sustain', 'release'
+    ]
+    @context['base_pulse'] = [
+      'pulse_width', 'pulse_width_slide', 'pulse_width_slide_curve', 'pulse_width_slide_shape'
+    ]
+    @context['base_phase'] = [
+      'phase', 'phase_offset', 'phase_slide', 'phase_slide_curve', 'phase_slide_shape'
+    ]
+    @context['base_filter'] = [
+      'cutoff', 'cutoff_slide', 'cutoff_slide_curve', 'cutoff_slide_shape'
+    ]
+    @context['base_res'] = [
+      'res', 'res_slide', 'res_slide_curve', 'res_slide_shape'
+    ]
+    @context['base_detuned'] = [
+      'detune', 'detune_slide', 'detune_slide_curve', 'detune_slide_shape'
+    ]
+    @context['base_mix'] = [
+      'mix', 'mix_slide', 'mix_slide_curve', 'mix_slide_shape'
+    ]
+    @context['base_modulated'] = [
+      'mod_invert_wave', 
+      'mod_phase', 'mod_phase_offset', 'mod_phase_slide', 'mod_phase_slide_curve', 'mod_phase_slide_shape',
+      'mod_pulse_width', 'mod_pulse_width_slide', 'mod_pulse_width_slide_curve', 'mod_pulse_width_slide_shape',
+      'mod_range', 'mod_range_slide', 'mod_range_slide_curve', 'mod_range_slide_shape',
+      'mod_wave'
+    ]
+    @context['base_synth'] = @context['base_sound'] + [
+      'amp_slide_curve', 'amp_slide_shape',
+      'attack_level',
+      'decay',
+      'env_curve',
+      'note_slide_curve', 'note_slide_shape',
+      'pan_slide_curve', 'pan_slide_shape',
+      'sustain_level'
+    ]
+    @context['base_ambient'] = @context['base_synth'] + [
+      'freq_addition', 'ring_multiplier', 'reverb_time', 'room_size'
+    ]
+    @context['base_fx'] = @context['base_synth'] + [
+      'pre_amp', 'pre_amp_slide', 'pre_amp_slide_curve', 'pre_amp_slide_shape'
+    ]
+
+    # Synths - grouped by related base function
+    @context['dull_bell'] = @context['base_synth']
+    @context['pretty_bell'] = @context['dull_bell']
+
+    @context['beep'] = @context['base_synth']
+    @context['saw'] = @context['beep']
+    @context['supersaw'] = @context['saw'] + @context['base_filter'] + @context['base_res']
+    @context['mod_saw'] = @context['saw'] + @context['base_filter'] + @context['base_modulated']
+    @context['mod_sine'] = @context['base_synth'] + @context['base_filter'] + @context['base_modulated']
+
+    @context['square'] = @context['base_synth'] + @context['base_filter']
+    @context['pulse'] = @context['square'] + @context['base_pulse']
+    @context['mod_pulse'] = @context['pulse'] + @context['base_modulated']
+    @context['tri'] = @context['pulse']
+    @context['mod_tri'] = @context['tri'] + @context['base_modulated']
+
+    @context['dsaw'] = @context['base_synth'] + @context['base_filter'] + @context['base_detuned']
+    @context['mod_dsaw'] = @context['dsaw'] + @context['base_modulated']
+
+    @context['fm'] = @context['base_synth'] + [
+      'divisor', 'divisor_slide', 'divisor_curve', 'divisor_shape',
+      'depth', 'depth_slide', 'depth_slide_curve', 'depth_slide_shape'
+    ]
+    @context['mod_fm'] = @context['fm'] + @context['base_modulated']
+
+    @context['noise'] = @context['base_synth'] + @context['base_filter'] + @context['base_res']
+    @context['gnoise'] = @context['noise']
+    @context['bnoise'] = @context['noise']
+    @context['pnoise'] = @context['noise']
+    @context['cnoise'] = @context['noise']
+
+    @context['growl'] = @context['base_synth']
+    @context['dark_ambience'] = @context['base_synth'] + [
+      'freq_addition', 'room_size', 'reverb_time', 'ring_multipler' #(sic)
+    ]
+    @context['dark_sea_horn'] = @context['base_synth']
+    @context['singer'] = @context['base_synth']
+    @context['wood'] = @context['base_synth']
+    @context['prophet'] = @context['base_synth'] + @context['base_filter'] + @context['base_res']
+    @context['tb303'] = @context['base_synth'] + @context['base_filter'] + @context['base_pulse'] + @context['base_res']
+    @context['zawa'] = @context['base_synth'] + @context['base_pulse'] + @context['base_phase'] + @context['base_modulated']
+
+    @context['sample'] = @context['base_synth'] + [
+      'finish', 'rate', 'start'
+    ]
+    # FX
+    @context['reverb'] = @context['base_fx'] + @context['base_mix'] + [
+      'room', 'room_slide', 'room_slide_curve', 'room_slide_shape',
+      'damp', 'damp_slide', 'damp_slide_curve', 'damp_slide_shape'
+    ]
+    @context['bitcrusher'] = @context['base_fx'] + @context['base_mix'] + [
+      'sample_rate', 'sample_rate_slide', 'sample_rate_slide_curve', 'sample_rate_slide_shape',
+      'bits', 'bits_slide', 'bits_slide_curve', 'bits_slide_shape'
+    ]
+    @context['level'] = @context['base_fx'] + [
+      'amp', 'amp_slide', 'amp_slide_curve', 'amp_slide_shape'
+    ]
+    @context['echo'] = @context['level'] + @context['base_phase'] + @context['base_mix'] + [
+      'pre_amp', 'pre_amp_slide', 'pre_amp_slide_curve', 'pre_amp_slide_shape',
+      'decay', 'decay_slide', 'decay_slide_curve', 'decay_slide_shape'
+    ]
+    @context['chorus'] = @context['echo']
+    @context['flanger'] = @context['echo'] + [
+      'delay', 'delay_slide', 'delay_slide_curve', 'delay_slide_shape',
+      'depth', 'depth_slide', 'depth_slide_curve', 'depth_slide_shape',
+      'feedback', 'feedback_slide', 'feedback_slide_curve', 'feedback_slide_shape',
+      'max_delay', 'stereo_invert_wave', 'invert_flange'
+    ]
+
+    @context['slicer'] = @context['level'] + @context['base_pulse'] + @context['base_phase'] + [
+      'amp_min', 'amp_min_slide', 'amp_min_slide_curve', 'amp_min_slide_shape',
+      'amp_max', 'amp_max_slide', 'amp_max_slide_curve', 'amp_max_slide_shape'
+    ]
+
+    @context['ixi_techno'] = @context['level'] + @context['base_mix'] + 
+        @context['base_phase'] + @context['base_res'] + [
+          'cutoff_min', 'cutoff_min_slide', 'cutoff_min_slide_curve', 'cutoff_min_slide_shape',
+          'cutoff_max', 'cutoff_max_slide', 'cutoff_max_slide_curve', 'cutoff_max_slide_shape'
+        ]
+    @context['wobble'] = @context['ixi_techno'] + @context['base_pulse']
+
+    @context['compressor'] = @context['level'] + [
+      'threshold', 'threshold_slide', 'threshold_slide_curve', 'threshold_slide_shape',
+      'clamp_time', 'clamp_time_slide', 'clamp_time_slide_curve', 'clamp_time_slide_shape',
+      'slope_above', 'slope_above_slide', 'slope_above_slide_curve', 'slope_above_slide_shape',
+      'slope_below', 'slope_below_slide', 'slope_below_slide_curve', 'slope_below_slide_shape',
+      'relax_time', 'relax_time_slide', 'relax_time_slide_curve', 'relax_time_slide_shape'
+    ]
+
+    @context['octaver'] = @context['level'] + [
+      'oct1_amp', 'oct1_amp_slide', 'oct1_amp_slide_curve', 'oct1_amp_slide_shape',
+      'oct1_interval', 'oct1_interval_slide', 'oct1_interval_slide_curve', 'oct1_interval_slide_shape',
+      'oct2_amp', 'oct2_amp_slide', 'oct2_amp_slide_curve', 'oct2_amp_slide_shape',
+      'oct3_amp', 'oct3_amp_slide', 'oct3_amp_slide_curve', 'oct3_amp_slide_shape'
+    ]
+
+    @context['ring_mod'] = @context['level'] + [
+      'freq', 'freq_slide', 'freq_slide_curve', 'freq_slide_shape',
+      'mod_amp', 'mod_amp_slide', 'mod_amp_slide_curve', 'mod_amp_slide_shape'
+    ]
+
+    @context['bpf'] = @context['level'] + @context['base_res'] + [
+      'centre', 'centre_slide', 'centre_slide_curve', 'centre_slide_shape'
+    ]
+    @context['rbpf'] = @context['bpf']
+    @context['nbpf'] = @context['bpf']
+    @context['nrbpf'] = @context['bpf']
+
+    @context['lpf'] = @context['level'] + @context['base_filter'] + @context['base_res'] + @context['base_mix']
+    @context['rlpf'] = @context['lpf']
+    @context['nlpf'] = @context['lpf']
+    @context['nrlpf'] = @context['lpf']
+    @context['hpf'] = @context['lpf']
+    @context['nhpf'] = @context['lpf']
+    @context['rhpf'] = @context['lpf']
+    @context['nrhpf'] = @context['lpf']
+
+    @context['normaliser'] = @context['level'] + [
+      'level', 'level_slide', 'level_slide_curve', 'level_slide_curve_shape'
+    ]
+
+    @context['distortion'] = @context['level'] + [
+      'distort', 'distort_slide', 'distort_slide_curve', 'distort_slide_shape'
+    ]
+
+    @context['pan'] = @context['level'] + [
+      'pan', 'pan_slide', 'pan_slide_curve', 'pan_slide_shape'
+    ]
+
   end
 
-  def self.get_completions(base)
-    SonicPiWordlist.new.get_completions base
-  end
-
-  def get_completions(base)
-    completions = []
-    completions += @directives.grep(/^#{base}/)
-    completions += @synths.grep(/^#{base}/)
-    completions += @fx.grep(/^#{base}/)
-    completions += @samples.grep(/^#{base}/)
+  def return_to_vim(completions)
     list = array2list(completions)
     VIM::command("call extend(g:sonicpicomplete_completions, [%s])" % list)
   end
 
+  def self.get_context(sound, base)
+    s = SonicPiWordlist.new
+    list = s.context[sound].collect do |e|
+      e.to_s + ":"
+    end.sort
+    if base != ''
+      list = list.grep(/^#{base}/)
+    end
+    s.return_to_vim(list)
+  end
+
   def self.get_synths(base)
-    list = array2list(SonicPiWordlist.new.synths.grep(/^#{base}/))
-    list
+    s = SonicPiWordlist.new
+    list = s.synths.grep(/^#{base}/).sort
+    s.return_to_vim(list)
   end
 
   def self.get_fx(base)
-    list = array2list(SonicPiWordlist.new.fx.grep(/^#{base}/))
-    list
+    s = SonicPiWordlist.new
+    list = s.fx.grep(/^#{base}/).sort
+    s.return_to_vim(list)
   end
 
   def self.get_samples(base)
-    list = array2list(SonicPiWordlist.new.samples.grep(/^#{base}/))
-    list
+    s = SonicPiWordlist.new
+    list = s.samples.grep(/^#{base}/).sort
+    s.return_to_vim(list)
   end
 
   def self.get_directives(base)
-    list = array2list(SonicPiWordlist.new.directives.grep(/^#{base}/))
-    list
+    s = SonicPiWordlist.new
+    list = s.directives.grep(/^#{base}/).sort
+    s.return_to_vim(list)
   end
 
   private
