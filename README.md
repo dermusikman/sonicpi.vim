@@ -4,7 +4,7 @@
 
 The sonicpi vim plugin requires the following:
 
-* An installation of [Sonic Pi 2.3+](http://www.sonic-pi.net/). 
+* An installation of [Sonic Pi 2.4+](http://www.sonic-pi.net/). 
 
 * [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/) to interface with Sonic Pi. (If you have some other command-line driven method for interfacing with Sonic Pi, just adjust the plugin accordingly.)
 
@@ -22,7 +22,7 @@ The plugin enables itself when Sonic Pi is running and the Ruby filetype is init
 
 ### Installation
 
-Prerequisites: [Sonic Pi 2.3+](http://www.sonic-pi.net/), [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/)
+Prerequisites: [Sonic Pi 2.4+](http://www.sonic-pi.net/), [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/)
 
 If you use [pathogen](https://github.com/tpope/vim-pathogen) (and you should), simply clone this repo into `~/.vim/bundle/` like so:
 
@@ -36,4 +36,6 @@ Whenever Sonic Pi is running, and you haven't disabled the `g:sonicpi_enabled` f
 * ~~Make contextual autocomplete (e.g., a list of samples follows `samples`)~~
 * ~~Add movement for Sonic Pi style files, ala [ruby.vim](https://github.com/vim-ruby/vim-ruby/blob/master/doc/vim-ruby.txt)'s modifications~~ (Now we stay in the Ruby filetype)
 * ~~Extend Ruby syntax to incorporate Sonic Pi directives~~
-* Update for Sonic Pi 2.4
+* ~~Update for Sonic Pi 2.4~~
+* Add named notes (e.g., `:c4`, `:e2`) and chords (e.g., `sus4`, `m7+5`)
+* Add oddball contexts beyond the sounds. For instance, we've added the "spread" context to include `rotate:`
