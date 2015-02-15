@@ -267,8 +267,8 @@ class SonicPiWordlist
     @context['tb303'] = @context['base_synth'] + @context['base_filter'] + @context['base_pulse'] + @context['base_res']
     @context['zawa'] = @context['base_synth'] + @context['base_pulse'] + @context['base_phase'] + @context['base_modulated']
 
-    @context['sample'] = @context['base_synth'] + [
-      'finish', 'rate', 'start'
+    @context['sample'] = @context['base_synth'] + @context['base_filter'] + @context['base_res'] + [
+      'finish', 'rate', 'start', 'norm'
     ]
     # FX
     @context['reverb'] = @context['base_fx'] + @context['base_mix'] + [
