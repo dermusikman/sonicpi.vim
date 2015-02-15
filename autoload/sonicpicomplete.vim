@@ -43,6 +43,13 @@ function! sonicpicomplete#GetContext(base)
     return
   endif
 
+  " Non-sound contexts
+  " #spread is added in 2.4
+  if s:line =~ '\vspread\s+\d+\s*,\s*\d+\s*,\s*'
+    execute 'ruby SonicPiWordlist.get_context("spread","'.a:base.'")'
+    return
+  endif
+
   " If we get to this point, we're looking for directives
   execute 'ruby SonicPiWordlist.get_directives("'.a:base.'")'
 endfunction
@@ -122,6 +129,8 @@ class SonicPiWordlist
     @directives += %w(with_fx with_merged_synth_defaults with_sample_bpm)
     @directives += %w(with_sample_pack with_sample_pack_as with_synth)
     @directives += %w(with_synth_defaults with_timing_warnings with_transpose)
+    # New with 2.4
+    @directives += %w(spread)
 # Synths from server/sonicpi/lib/sonicpi/synthinfo.rb
     @synths = []
     @synths += %w(:dull_bell :pretty_bell :beep :sine :saw :pulse)
@@ -344,6 +353,9 @@ class SonicPiWordlist
     @context['pan'] = @context['level'] + [
       'pan', 'pan_slide', 'pan_slide_curve', 'pan_slide_shape'
     ]
+
+    # Oddball helpers
+    @context['spread'] = [ 'rotate' ]
 
   end
 
