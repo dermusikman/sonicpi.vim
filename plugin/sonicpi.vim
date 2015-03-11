@@ -11,12 +11,18 @@ if !exists('g:sonicpi_enabled')
   let g:sonicpi_enabled = 1
 endif
 
+if !exists('g:sonicpi_keymaps_enabled')
+  let g:sonicpi_keymaps_enabled = 1
+endif
+
 " Contextual initialization modelled after tpope's vim-sonicpi
 function! sonicpi#detect()
   " Test if Sonic Pi is available. (Pending a PR for sonic-pi-cli.)
   let s:activep = system(g:sonicpi_command.' stop 2>/dev/null && echo -n $?')
   if s:activep == 0 && expand(&filetype) == 'ruby' && g:sonicpi_enabled
-    call s:load_keymaps()
+    if g:sonicpi_keymaps_enabled
+      call s:load_keymaps()
+    endif
     call s:load_autocomplete()
     call s:load_syntax()
   endif
