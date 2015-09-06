@@ -18,7 +18,7 @@ endif
 " Contextual initialization modelled after tpope's vim-sonicpi
 function! sonicpi#detect()
   " Test if Sonic Pi is available. (Pending a PR for sonic-pi-cli.)
-  let s:activep = system(g:sonicpi_command.' stop 2>/dev/null && echo -n $?')
+  let s:activep = system(g:sonicpi_command.' version 2>/dev/null && echo -n $?')
   if s:activep == 0 && expand(&filetype) == 'ruby' && g:sonicpi_enabled
     if g:sonicpi_keymaps_enabled
       call s:load_keymaps()
