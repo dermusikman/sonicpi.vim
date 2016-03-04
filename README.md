@@ -4,9 +4,10 @@
 
 The sonicpi vim plugin requires the following:
 
-* An installation of [Sonic Pi 2.4+](http://www.sonic-pi.net/). 
+* An installation of [Sonic Pi 2.4+](http://www.sonic-pi.net/).
 
-* [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/) to interface with Sonic Pi. (If you have some other command-line driven method for interfacing with Sonic Pi, just adjust the plugin accordingly.)
+* A tool to interface with Sonic Pi. The default is [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/).
+
 
 ### Features
 
@@ -20,15 +21,32 @@ The plugin enables itself when Sonic Pi is running and the Ruby filetype is init
 
 * Extension of Ruby syntax to include Sonic Pi terms
 
+
 ### Installation
 
-Prerequisites: [Sonic Pi 2.4+](http://www.sonic-pi.net/), [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/)
+Prerequisites: [Sonic Pi 2.4+](http://www.sonic-pi.net/), and [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/) or similar.
 
 If you use [pathogen](https://github.com/tpope/vim-pathogen) (and you should), simply clone this repo into `~/.vim/bundle/` like so:
 
 `git clone https://github.com/dermusikman/sonicpi.vim.git`
 
 Whenever Sonic Pi is running, and you haven't disabled the `g:sonicpi_enabled` flag in your configs, the plugin will activate. Otherwise, it's a normal Ruby session!
+
+
+### Configuration
+
+`g:sonicpi_keymaps_enabled` can be used to disable the default keybindings.
+
+`g:sonicpi_command` can be used to configure what tool is used to send the
+code to Sonic Pi. The default is `sonic_pi`.
+
+
+## Sonic Pi interfacing tools
+
+* [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/). The default.
+
+* [sonic-pi-pipe](https://github.com/lpil/sonic-pi-tools). Written in Go, so significantly faster and more responsive than sonic-pi-cli.
+
 
 ### TODO
 
