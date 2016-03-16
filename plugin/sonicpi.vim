@@ -47,9 +47,10 @@ function! s:load_autocomplete()
   endif
 endfunction
 
-" Set keymaps in Normal mode
+" Set keymaps
 function! s:load_keymaps()
   nnoremap <buffer> <silent> <leader>r :exe "silent w !".g:sonicpi_command<CR>
+  vnoremap <silent> <buffer> <leader>r :<C-U>exe "silent '<,'> w !".g:sonicpi_command<CR>
   nnoremap <buffer> <silent> <leader>S :call system(g:sonicpi_command." stop")<CR>
 endfunction
 
