@@ -47,10 +47,11 @@ function! s:load_autocomplete()
   endif
 endfunction
 
-" Set keymaps in Normal mode
+" Set keymaps
 function! s:load_keymaps()
-  nnoremap <leader>r :silent w !sonic_pi<CR>
-  nnoremap <leader>S :call system("sonic_pi stop")<CR>
+  nnoremap <buffer> <silent> <leader>r :exe "silent w !".g:sonicpi_command<CR>
+  vnoremap <silent> <buffer> <leader>r :<C-U>exe "silent '<,'> w !".g:sonicpi_command<CR>
+  nnoremap <buffer> <silent> <leader>S :call system(g:sonicpi_command." stop")<CR>
 endfunction
 
 " Extend Ruby syntax to include Sonic Pi terms
