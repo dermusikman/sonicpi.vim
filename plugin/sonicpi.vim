@@ -49,8 +49,8 @@ endfunction
 
 " Set keymaps in Normal mode
 function! s:load_keymaps()
-  nnoremap <leader>r :silent w !sonic_pi<CR>
-  nnoremap <leader>S :call system("sonic_pi stop")<CR>
+  nnoremap <leader>r :exe "silent w !".g:sonicpi_command<CR>
+  nnoremap <leader>S :call system(g:sonicpi_command." stop")<CR>
 endfunction
 
 " Extend Ruby syntax to include Sonic Pi terms
