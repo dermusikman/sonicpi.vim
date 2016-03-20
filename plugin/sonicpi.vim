@@ -57,7 +57,7 @@ function! s:SonicPiSendBuffer()
 endfunction
 
 function! s:SonicPiStop()
-  call system("sonic_pi stop")
+  execute "silent !" . g:sonicpi_command . " stop"
 endfunction
 
 " Export public API
