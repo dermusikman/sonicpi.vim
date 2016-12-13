@@ -45,7 +45,7 @@ code to Sonic Pi. The default is `sonic_pi`.
 
 * [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/). The default.
 
-* [sonic-pi-pipe](https://github.com/lpil/sonic-pi-tools). Written in Go, so significantly faster and more responsive than sonic-pi-cli.
+* [sonic-pi-pipe](https://github.com/lpil/sonic-pi-tools). Written in Go, and more responsive than sonic-pi-cli.
 
 
 ### TODO
