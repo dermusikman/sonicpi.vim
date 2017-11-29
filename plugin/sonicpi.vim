@@ -53,7 +53,12 @@ function! s:load_syntax()
 endfunction
 
 function! s:SonicPiSendBuffer()
-  execute "silent w !" . g:sonicpi_command
+  " Extend compatibility to sonic-pi-tool
+  if g:sonicpi_command == "sonic-pi-tool"
+    execute "silent w ! xargs -0 " . g:sonicpi_command . " eval "
+  else
+    execute "silent w !" . g:sonicpi_command
+  endif
 endfunction
 
 function! s:SonicPiStop()
