@@ -7,6 +7,18 @@ if !exists('g:sonicpi_command')
   let g:sonicpi_command = 'sonic_pi'
 endif
 
+if !exists('g:sonicpi_send')
+  let g:sonicpi_send = ''
+endif
+
+if !exists('g:sonicpi_stop')
+  let g:sonicpi_stop = 'stop'
+endif
+
+if !exists('g:vim_redraw')
+  let g:vim_redraw = 0
+endif
+
 if !exists('g:sonicpi_enabled')
   let g:sonicpi_enabled = 1
 endif
@@ -53,11 +65,14 @@ function! s:load_syntax()
 endfunction
 
 function! s:SonicPiSendBuffer()
-  execute "silent w !" . g:sonicpi_command
+  execute "silent w !" . g:sonicpi_command . " " . g:sonicpi_send
 endfunction
 
 function! s:SonicPiStop()
-  execute "silent !" . g:sonicpi_command . " stop"
+  execute "silent !" . g:sonicpi_command . " " . g:sonicpi_stop
+  if g:vim_redraw
+    execute ":redraw!"
+  endif
 endfunction
 
 " Export public API
