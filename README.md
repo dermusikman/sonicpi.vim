@@ -63,10 +63,10 @@ let g:vim_redraw = 1
 
 * [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/). The default.
 
-* [sonic-pi-tool](https://github.com/lpil/sonic-pi-tool). Written in Go, and more responsive than sonic-pi-cli.
+* [sonic-pi-tool](https://github.com/lpil/sonic-pi-tool). Written in Rust, and more responsive than sonic-pi-cli.
 
 * [sonic-pi-pipe](https://github.com/lpil/sonic-pi-tool/tree/master/old). An
-older version of `sonic-pi-tool` with less functionality.
+older version of `sonic-pi-tool` with less functionality written in Go.
 
 ### TODO
 
