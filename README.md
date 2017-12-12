@@ -40,13 +40,33 @@ Whenever Sonic Pi is running, and you haven't disabled the `g:sonicpi_enabled` f
 `g:sonicpi_command` can be used to configure what tool is used to send the
 code to Sonic Pi. The default is `sonic_pi`.
 
+`g:sonicpi_send` and `g:sonicpi_stop` can be used to adjust the arguments sent
+to `g:sonicpi_command`. The default values are `g:sonicpi_send = ''` and
+`g:sonicpi_stop = 'stop'`.
+
+`g:vim_redraw`, if true (such as by setting it to `1`), will redraw the screen
+after the stop command instead of waiting for output. Its default value is
+`0`.
+
+As an example, to use
+[`sonic-pi-tool`](https://github.com/lpil/sonic-pi-tool/), the following
+`.vimrc` settings would work:
+
+```vim
+let g:sonicpi_command = 'sonic-pi-tool'
+let g:sonicpi_send = 'eval-stdin'
+let g:sonicpi_stop = 'stop'
+let g:vim_redraw = 1
+```
 
 ## Sonic Pi interfacing tools
 
 * [sonic-pi-cli](https://github.com/Widdershin/sonic-pi-cli/). The default.
 
-* [sonic-pi-pipe](https://github.com/lpil/sonic-pi-tools). Written in Go, and more responsive than sonic-pi-cli.
+* [sonic-pi-tool](https://github.com/lpil/sonic-pi-tool). Written in Rust, and more responsive than sonic-pi-cli.
 
+* [sonic-pi-pipe](https://github.com/lpil/sonic-pi-tool/tree/master/old). An
+older version of `sonic-pi-tool` with less functionality written in Go.
 
 ### TODO
 
