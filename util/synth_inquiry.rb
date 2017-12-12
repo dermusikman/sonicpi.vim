@@ -5,8 +5,10 @@ require './synths/synthinfo'
 fp = File.open("/tmp/sonic-pi-synths-for-vim.rb", "w")
 
 fp.puts "# The synths"
+fp.puts "@synths = []"
 fp.puts "@context = {}"
 SonicPi::Synths::SynthInfo.all_synths.each do |synth|
+  fp.puts "@synths += ':#{synth.to_s}'"
   fp.print "@context['#{synth.to_s}'] = "  # We're printing to save the \n
   args = SonicPi::Synths::SynthInfo.get_info(synth).arg_defaults
   args.select {|k,v| v.is_a? Symbol}
