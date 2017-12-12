@@ -131,231 +131,100 @@ class SonicPiWordlist
     @directives += %w(with_synth_defaults with_timing_warnings with_transpose)
     # New with 2.4
     @directives += %w(spread)
-# Synths from server/sonicpi/lib/sonicpi/synthinfo.rb
+
+    # The synths
     @synths = []
-    @synths += %w(:dull_bell :pretty_bell :beep :sine :saw :pulse)
-    @synths += %w(:square :tri :dsaw :fm :mod_fm :mod_saw :mod_dsaw)
-    @synths += %w(:mod_sine :mod_beep :mod_tri :mod_pulse :tb303)
-    @synths += %w(:supersaw :prophet :zawa :dark_ambience :growl)
-    @synths += %w(:hollow :noise :pnoise)
-    @synths += %w(:bnoise :gnoise :cnoise)
-    # dark_sea_horn and wood have been removed in 2.4 - come back soon!
-    #@synths += %w(:dark_sea_horn :wood)
-# FX from server/sonicpi/lib/sonicpi/synthinfo.rb
-    @fx = []
-    @fx += %w(:bitcrusher :reverb)
-    @fx += %w(:level :echo :slicer :wobble :ixi_techno)
-    @fx += %w(:compressor :rlpf :nrlpf :rhpf :nrhpf)
-    @fx += %w(:hpf :nhpf :lpf :nlpf :normaliser)
-    @fx += %w(:distortion :pan :bpf :nbpf :rbpf)
-    @fx += %w(:nrbpf :ring :flanger)
-# Samples from server/sonicpi/lib/sonicpi/synthinfo.rb
-    @samples = []
-    @samples += %w(:drum_heavy_kick :drum_tom_mid_soft :drum_tom_mid_hard)
-    @samples += %w(:drum_tom_lo_soft :drum_tom_lo_hard :drum_tom_hi_soft)
-    @samples += %w(:drum_tom_hi_hard :drum_splash_soft :drum_splash_hard)
-    @samples += %w(:drum_snare_soft :drum_snare_hard :drum_cymbal_soft)
-    @samples += %w(:drum_cymbal_hard :drum_cymbal_open :drum_cymbal_closed)
-    @samples += %w(:drum_cymbal_pedal :drum_bass_soft :drum_bass_hard)
-    @samples += %w(:elec_triangle :elec_snare :elec_lo_snare :elec_hi_snare)
-    @samples += %w(:elec_mid_snare :elec_cymbal :elec_soft_kick)
-    @samples += %w(:elec_filt_snare :elec_fuzz_tom :elec_chime :elec_bong)
-    @samples += %w(:elec_twang :elec_wood :elec_pop :elec_beep :elec_blip)
-    @samples += %w(:elec_blip2 :elec_ping :elec_bell :elec_flip :elec_tick)
-    @samples += %w(:elec_hollow_kick :elec_twip :elec_plip :elec_blup)
-    @samples += %w(:guit_harmonics :guit_e_fifths :guit_e_slide :guit_em9)
-    @samples += %w(:misc_burp :perc_bell :perc_snap :perc_snap2)
-    @samples += %w(:ambi_soft_buzz :ambi_swoosh :ambi_drone :ambi_glass_hum)
-    @samples += %w(:ambi_glass_rub :ambi_haunted_hum :ambi_piano)
-    @samples += %w(:ambi_lunar_land :ambi_dark_woosh :ambi_choir)
-    @samples += %w(:bass_hit_c :bass_hard_c :bass_thick_c :bass_drop_c)
-    @samples += %w(:bass_woodsy_c :bass_voxy_c :bass_voxy_hit_c :bass_dnb_f)
-    @samples += %w(:sn_dub :sn_dolf :sn_zome :bd_ada :bd_pure :bd_808)
-    @samples += %w(:bd_zum :bd_gas :bd_sone :bd_haus :bd_zome :bd_boom)
-    @samples += %w(:bd_klub :bd_fat :bd_tek :loop_industrial :loop_compus)
-    @samples += %w(:loop_amen :loop_amen_full :loop_garzul)
-    @samples += %w(:loop_mik)
-
-# Contexts in which we may want particular completions
     @context = {}
-    # Base contexts from which sound attributes are built
-    @context['base_sound'] = [
-      'amp', 'amp_slide', 'pan', 'pan_slide', 'attack', 'sustain', 'release'
-    ]
-    @context['base_pulse'] = [
-      'pulse_width', 'pulse_width_slide', 'pulse_width_slide_curve', 'pulse_width_slide_shape'
-    ]
-    @context['base_phase'] = [
-      'phase', 'phase_offset', 'phase_slide', 'phase_slide_curve', 'phase_slide_shape'
-    ]
-    @context['base_filter'] = [
-      'cutoff', 'cutoff_slide', 'cutoff_slide_curve', 'cutoff_slide_shape'
-    ]
-    @context['base_res'] = [
-      'res', 'res_slide', 'res_slide_curve', 'res_slide_shape'
-    ]
-    @context['base_detuned'] = [
-      'detune', 'detune_slide', 'detune_slide_curve', 'detune_slide_shape'
-    ]
-    @context['base_mix'] = [
-      'mix', 'mix_slide', 'mix_slide_curve', 'mix_slide_shape'
-    ]
-    @context['base_modulated'] = [
-      'mod_invert_wave', 
-      'mod_phase', 'mod_phase_offset', 'mod_phase_slide', 'mod_phase_slide_curve', 'mod_phase_slide_shape',
-      'mod_pulse_width', 'mod_pulse_width_slide', 'mod_pulse_width_slide_curve', 'mod_pulse_width_slide_shape',
-      'mod_range', 'mod_range_slide', 'mod_range_slide_curve', 'mod_range_slide_shape',
-      'mod_wave'
-    ]
-    @context['base_synth'] = @context['base_sound'] + [
-      'amp_slide_curve', 'amp_slide_shape',
-      'attack_level',
-      'decay',
-      'env_curve',
-      'note_slide_curve', 'note_slide_shape',
-      'pan_slide_curve', 'pan_slide_shape',
-      'sustain_level'
-    ]
-    @context['base_ambient'] = @context['base_synth'] + [
-      'freq_addition', 'ring_multiplier', 'reverb_time', 'room_size'
-    ]
-    @context['base_fx'] = @context['base_synth'] + [
-      'pre_amp', 'pre_amp_slide', 'pre_amp_slide_curve', 'pre_amp_slide_shape'
-    ]
+    @synths += ':dull_bell'
+    @context['dull_bell'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2}
+    @synths += ':pretty_bell'
+    @context['pretty_bell'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2}
+    @synths += ':beep'
+    @context['beep'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2}
+    @synths += ':sine'
+    @context['sine'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2}
+    @synths += ':saw'
+    @context['saw'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2}
+    @synths += ':pulse'
+    @context['pulse'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0}
+    @synths += ':subpulse'
+    @context['subpulse'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0, :sub_amp=>1, :sub_amp_slide=>0, :sub_amp_slide_shape=>1, :sub_amp_slide_curve=>0, :sub_detune=>-12, :sub_detune_slide=>0, :sub_detune_slide_shape=>1, :sub_detune_slide_curve=>0}
+    @synths += ':square'
+    @context['square'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0}
+    @synths += ':tri'
+    @context['tri'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0}
+    @synths += ':dsaw'
+    @context['dsaw'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :detune=>0.1, :detune_slide=>0, :detune_slide_shape=>1, :detune_slide_curve=>0}
+    @synths += ':dpulse'
+    @context['dpulse'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :detune=>0.1, :detune_slide=>0, :detune_slide_shape=>1, :detune_slide_curve=>0, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0, :dpulse_width=>0.5, :dpulse_width_slide=>0, :dpulse_width_slide_shape=>1, :dpulse_width_slide_curve=>0}
+    @synths += ':dtri'
+    @context['dtri'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :detune=>0.1, :detune_slide=>0, :detune_slide_shape=>1, :detune_slide_curve=>0}
+    @synths += ':fm'
+    @context['fm'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :divisor=>2, :divisor_slide=>0, :divisor_slide_shape=>1, :divisor_slide_curve=>0, :depth=>1, :depth_slide=>0, :depth_slide_shape=>1, :depth_slide_curve=>0}
+    @synths += ':mod_fm'
+    @context['mod_fm'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :divisor=>2, :divisor_slide=>0, :divisor_slide_shape=>1, :divisor_slide_curve=>0, :depth=>1, :depth_slide=>0, :depth_slide_shape=>1, :depth_slide_curve=>0, :mod_phase=>0.25, :mod_range=>5, :mod_pulse_width=>0.5, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1}
+    @synths += ':mod_saw'
+    @context['mod_saw'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :mod_phase=>0.25, :mod_phase_slide=>0, :mod_phase_slide_shape=>1, :mod_phase_slide_curve=>0, :mod_range=>5, :mod_range_slide=>0, :mod_range_slide_shape=>1, :mod_range_slide_curve=>0, :mod_pulse_width=>0.5, :mod_pulse_width_slide=>0, :mod_pulse_width_slide_shape=>1, :mod_pulse_width_slide_curve=>0, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1}
+    @synths += ':mod_dsaw'
+    @context['mod_dsaw'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :mod_phase=>0.25, :mod_phase_slide=>0, :mod_phase_slide_shape=>1, :mod_phase_slide_curve=>0, :mod_range=>5, :mod_range_slide=>0, :mod_range_slide_shape=>1, :mod_range_slide_curve=>0, :mod_pulse_width=>0.5, :mod_pulse_width_slide=>0, :mod_pulse_width_slide_shape=>1, :mod_pulse_width_slide_curve=>0, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1, :detune=>0.1, :detune_slide=>0, :detune_slide_shape=>1, :detune_slide_curve=>0}
+    @synths += ':mod_sine'
+    @context['mod_sine'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :mod_phase=>0.25, :mod_phase_slide=>0, :mod_phase_slide_shape=>1, :mod_phase_slide_curve=>0, :mod_range=>5, :mod_range_slide=>0, :mod_range_slide_shape=>1, :mod_range_slide_curve=>0, :mod_pulse_width=>0.5, :mod_pulse_width_slide=>0, :mod_pulse_width_slide_shape=>1, :mod_pulse_width_slide_curve=>0, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1}
+    @synths += ':mod_beep'
+    @context['mod_beep'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :mod_phase=>0.25, :mod_phase_slide=>0, :mod_phase_slide_shape=>1, :mod_phase_slide_curve=>0, :mod_range=>5, :mod_range_slide=>0, :mod_range_slide_shape=>1, :mod_range_slide_curve=>0, :mod_pulse_width=>0.5, :mod_pulse_width_slide=>0, :mod_pulse_width_slide_shape=>1, :mod_pulse_width_slide_curve=>0, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1}
+    @synths += ':mod_tri'
+    @context['mod_tri'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :mod_phase=>0.25, :mod_phase_slide=>0, :mod_phase_slide_shape=>1, :mod_phase_slide_curve=>0, :mod_range=>5, :mod_range_slide=>0, :mod_range_slide_shape=>1, :mod_range_slide_curve=>0, :mod_pulse_width=>0.5, :mod_pulse_width_slide=>0, :mod_pulse_width_slide_shape=>1, :mod_pulse_width_slide_curve=>0, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1}
+    @synths += ':mod_pulse'
+    @context['mod_pulse'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :mod_phase=>0.25, :mod_phase_slide=>0, :mod_phase_slide_shape=>1, :mod_phase_slide_curve=>0, :mod_range=>5, :mod_range_slide=>0, :mod_range_slide_shape=>1, :mod_range_slide_curve=>0, :mod_pulse_width=>0.5, :mod_pulse_width_slide=>0, :mod_pulse_width_slide_shape=>1, :mod_pulse_width_slide_curve=>0, :mod_phase_offset=>0, :mod_invert_wave=>0, :mod_wave=>1, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0}
+    @synths += ':chiplead'
+    @context['chiplead'] = {:note=>60, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :note_resolution=>0.1, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :width=>0}
+    @synths += ':chipbass'
+    @context['chipbass'] = {:note=>60, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :note_resolution=>0.1, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2}
+    @synths += ':tb303'
+    @context['tb303'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>120, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :cutoff_min=>30, :cutoff_min_slide=>0, :cutoff_min_slide_shape=>1, :cutoff_min_slide_curve=>0, :cutoff_attack=>0, :cutoff_decay=>0, :cutoff_sustain=>0, :cutoff_release=>1, :cutoff_attack_level=>1, :cutoff_decay_level=>1, :cutoff_sustain_level=>1, :res=>0.9, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0, :wave=>0, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0}
+    @synths += ':supersaw'
+    @context['supersaw'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>130, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.7, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':hoover'
+    @context['hoover'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0.05, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>130, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.1, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':prophet'
+    @context['prophet'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.7, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':zawa'
+    @context['zawa'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.9, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0, :phase=>1, :phase_slide=>0, :phase_slide_shape=>1, :phase_slide_curve=>0, :phase_offset=>0, :wave=>3, :invert_wave=>0, :range=>24, :range_slide=>0, :range_slide_shape=>1, :range_slide_curve=>0, :disable_wave=>0, :pulse_width=>0.5, :pulse_width_slide=>0, :pulse_width_slide_shape=>1, :pulse_width_slide_curve=>0}
+    @synths += ':dark_ambience'
+    @context['dark_ambience'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.7, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0, :detune1=>12, :detune1_slide=>0, :detune1_slide_shape=>1, :detune1_slide_curve=>0, :detune2=>24, :detune2_slide=>0, :detune2_slide_shape=>1, :detune2_slide_curve=>0, :noise=>0, :ring=>0.2, :room=>70, :reverb_time=>100}
+    @synths += ':growl'
+    @context['growl'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0.1, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>130, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.7, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':hollow'
+    @context['hollow'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>90, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.99, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0, :noise=>1, :norm=>0}
+    @synths += ':blade'
+    @context['blade'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>100, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :vibrato_rate=>6, :vibrato_rate_slide_shape=>1, :vibrato_rate_slide_curve=>0, :vibrato_depth=>0.15, :vibrato_depth_slide_shape=>1, :vibrato_depth_slide_curve=>0, :vibrato_delay=>0.5, :vibrato_onset=>0.1}
+    @synths += ':piano'
+    @context['piano'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :vel=>0.2, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :hard=>0.5, :stereo_width=>0}
+    @synths += ':pluck'
+    @context['pluck'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay=>0, :decay_level=>1, :sustain_level=>1, :noise_amp=>0.8, :max_delay_time=>0.125, :pluck_decay=>30, :coef=>0.3}
+    @synths += ':tech_saws'
+    @context['tech_saws'] = {:note=>52, :note_slide=>0, :note_slide_shape=>1, :note_slide_curve=>0, :amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>130, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0.7, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':sound_in'
+    @context['sound_in'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>1, :release=>0, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>0, :input=>1}
+    @synths += ':sound_in_stereo'
+    @context['sound_in_stereo'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>1, :release=>0, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>0, :input=>1}
+    @synths += ':noise'
+    @context['noise'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':pnoise'
+    @context['pnoise'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':bnoise'
+    @context['bnoise'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':gnoise'
+    @context['gnoise'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':cnoise'
+    @context['cnoise'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>1, :amp_slide_curve=>0, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>0, :release=>1, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>2, :cutoff=>110, :cutoff_slide=>0, :cutoff_slide_shape=>1, :cutoff_slide_curve=>0, :res=>0, :res_slide=>0, :res_slide_shape=>1, :res_slide_curve=>0}
+    @synths += ':chipnoise'
+    @context['chipnoise'] = {:amp=>1, :amp_slide=>0, :amp_slide_shape=>0, :amp_slide_curve=>1, :pan=>0, :pan_slide=>0, :pan_slide_shape=>1, :pan_slide_curve=>0, :attack=>0, :decay=>0, :sustain=>1, :release=>0, :attack_level=>1, :decay_level=>1, :sustain_level=>1, :env_curve=>0, :freq_band=>0, :freq_band_slide=>0, :freq_band_slide_shape=>1, :freq_band_slide_curve=>0}
 
-    # Synths - grouped by related base function
-    @context['dull_bell'] = @context['base_synth']
-    @context['pretty_bell'] = @context['dull_bell']
+    # The samples
+    @samples = [":drum_heavy_kick", ":drum_tom_mid_soft", ":drum_tom_mid_hard", ":drum_tom_lo_soft", ":drum_tom_lo_hard", ":drum_tom_hi_soft", ":drum_tom_hi_hard", ":drum_splash_soft", ":drum_splash_hard", ":drum_snare_soft", ":drum_snare_hard", ":drum_cymbal_soft", ":drum_cymbal_hard", ":drum_cymbal_open", ":drum_cymbal_closed", ":drum_cymbal_pedal", ":drum_bass_soft", ":drum_bass_hard", ":drum_cowbell", ":drum_roll", ":elec_triangle", ":elec_snare", ":elec_lo_snare", ":elec_hi_snare", ":elec_mid_snare", ":elec_cymbal", ":elec_soft_kick", ":elec_filt_snare", ":elec_fuzz_tom", ":elec_chime", ":elec_bong", ":elec_twang", ":elec_wood", ":elec_pop", ":elec_beep", ":elec_blip", ":elec_blip2", ":elec_ping", ":elec_bell", ":elec_flip", ":elec_tick", ":elec_hollow_kick", ":elec_twip", ":elec_plip", ":elec_blup", ":guit_harmonics", ":guit_e_fifths", ":guit_e_slide", ":guit_em9", ":misc_burp", ":misc_crow", ":misc_cineboom", ":perc_bell", ":perc_snap", ":perc_snap2", ":perc_swash", ":perc_till", ":ambi_soft_buzz", ":ambi_swoosh", ":ambi_drone", ":ambi_glass_hum", ":ambi_glass_rub", ":ambi_haunted_hum", ":ambi_piano", ":ambi_lunar_land", ":ambi_dark_woosh", ":ambi_choir", ":bass_hit_c", ":bass_hard_c", ":bass_thick_c", ":bass_drop_c", ":bass_woodsy_c", ":bass_voxy_c", ":bass_voxy_hit_c", ":bass_dnb_f", ":sn_dub", ":sn_dolf", ":sn_zome", ":bd_ada", ":bd_pure", ":bd_808", ":bd_zum", ":bd_gas", ":bd_sone", ":bd_haus", ":bd_zome", ":bd_boom", ":bd_klub", ":bd_fat", ":bd_tek", ":loop_industrial", ":loop_compus", ":loop_amen", ":loop_amen_full", ":loop_garzul", ":loop_mika", ":loop_breakbeat", ":loop_safari", ":loop_tabla", ":tabla_tas1", ":tabla_tas2", ":tabla_tas3", ":tabla_ke1", ":tabla_ke2", ":tabla_ke3", ":tabla_na", ":tabla_na_o", ":tabla_tun1", ":tabla_tun2", ":tabla_tun3", ":tabla_te1", ":tabla_te2", ":tabla_te_ne", ":tabla_te_m", ":tabla_ghe1", ":tabla_ghe2", ":tabla_ghe3", ":tabla_ghe4", ":tabla_ghe5", ":tabla_ghe6", ":tabla_ghe7", ":tabla_ghe8", ":tabla_dhec", ":tabla_na_s", ":tabla_re", ":vinyl_backspin", ":vinyl_rewind", ":vinyl_scratch", ":vinyl_hiss"]
 
-    @context['beep'] = @context['base_synth']
-    @context['saw'] = @context['beep']
-    @context['supersaw'] = @context['saw'] + @context['base_filter'] + @context['base_res']
-    @context['mod_saw'] = @context['saw'] + @context['base_filter'] + @context['base_modulated']
-    @context['mod_sine'] = @context['base_synth'] + @context['base_filter'] + @context['base_modulated']
-
-    @context['square'] = @context['base_synth'] + @context['base_filter']
-    @context['pulse'] = @context['square'] + @context['base_pulse']
-    @context['mod_pulse'] = @context['pulse'] + @context['base_modulated']
-    @context['tri'] = @context['pulse']
-    @context['mod_tri'] = @context['tri'] + @context['base_modulated']
-
-    @context['dsaw'] = @context['base_synth'] + @context['base_filter'] + @context['base_detuned']
-    @context['mod_dsaw'] = @context['dsaw'] + @context['base_modulated']
-
-    @context['fm'] = @context['base_synth'] + [
-      'divisor', 'divisor_slide', 'divisor_curve', 'divisor_shape',
-      'depth', 'depth_slide', 'depth_slide_curve', 'depth_slide_shape'
-    ]
-    @context['mod_fm'] = @context['fm'] + @context['base_modulated']
-
-    @context['noise'] = @context['base_synth'] + @context['base_filter'] + @context['base_res']
-    @context['gnoise'] = @context['noise']
-    @context['bnoise'] = @context['noise']
-    @context['pnoise'] = @context['noise']
-    @context['cnoise'] = @context['noise']
-
-    @context['growl'] = @context['base_synth']
-    @context['dark_ambience'] = @context['base_synth'] + [
-      'freq_addition', 'room_size', 'reverb_time', 'ring_multipler' #(sic)
-    ]
-    # dark_sea_horn has been removed in 2.4 - come back soon!
-    #@context['dark_sea_horn'] = @context['base_synth']
-    @context['hollow'] = @context['base_synth']
-    # wood has been removed in 2.4...
-    #@context['wood'] = @context['base_synth']
-    @context['prophet'] = @context['base_synth'] + @context['base_filter'] + @context['base_res']
-    @context['tb303'] = @context['base_synth'] + @context['base_filter'] + @context['base_pulse'] + @context['base_res']
-    @context['zawa'] = @context['base_synth'] + @context['base_pulse'] + @context['base_phase'] + @context['base_modulated']
-
-    @context['sample'] = @context['base_synth'] + @context['base_filter'] + @context['base_res'] + [
-      'finish', 'rate', 'start', 'norm'
-    ]
-    # FX
-    @context['reverb'] = @context['base_fx'] + @context['base_mix'] + [
-      'room', 'room_slide', 'room_slide_curve', 'room_slide_shape',
-      'damp', 'damp_slide', 'damp_slide_curve', 'damp_slide_shape'
-    ]
-    @context['bitcrusher'] = @context['base_fx'] + @context['base_mix'] + [
-      'sample_rate', 'sample_rate_slide', 'sample_rate_slide_curve', 'sample_rate_slide_shape',
-      'bits', 'bits_slide', 'bits_slide_curve', 'bits_slide_shape'
-    ]
-    @context['level'] = @context['base_fx'] + [
-      'amp', 'amp_slide', 'amp_slide_curve', 'amp_slide_shape'
-    ]
-    @context['echo'] = @context['level'] + @context['base_phase'] + @context['base_mix'] + [
-      'pre_amp', 'pre_amp_slide', 'pre_amp_slide_curve', 'pre_amp_slide_shape',
-      'decay', 'decay_slide', 'decay_slide_curve', 'decay_slide_shape'
-    ]
-    @context['chorus'] = @context['echo']
-    @context['flanger'] = @context['echo'] + [
-      'delay', 'delay_slide', 'delay_slide_curve', 'delay_slide_shape',
-      'depth', 'depth_slide', 'depth_slide_curve', 'depth_slide_shape',
-      'feedback', 'feedback_slide', 'feedback_slide_curve', 'feedback_slide_shape',
-      'max_delay', 'stereo_invert_wave', 'invert_flange'
-    ]
-
-    @context['slicer'] = @context['level'] + @context['base_pulse'] + @context['base_phase'] + [
-      'amp_min', 'amp_min_slide', 'amp_min_slide_curve', 'amp_min_slide_shape',
-      'amp_max', 'amp_max_slide', 'amp_max_slide_curve', 'amp_max_slide_shape'
-    ]
-
-    @context['ixi_techno'] = @context['level'] + @context['base_mix'] + 
-        @context['base_phase'] + @context['base_res'] + [
-          'cutoff_min', 'cutoff_min_slide', 'cutoff_min_slide_curve', 'cutoff_min_slide_shape',
-          'cutoff_max', 'cutoff_max_slide', 'cutoff_max_slide_curve', 'cutoff_max_slide_shape'
-        ]
-    @context['wobble'] = @context['ixi_techno'] + @context['base_pulse']
-
-    @context['compressor'] = @context['level'] + [
-      'threshold', 'threshold_slide', 'threshold_slide_curve', 'threshold_slide_shape',
-      'clamp_time', 'clamp_time_slide', 'clamp_time_slide_curve', 'clamp_time_slide_shape',
-      'slope_above', 'slope_above_slide', 'slope_above_slide_curve', 'slope_above_slide_shape',
-      'slope_below', 'slope_below_slide', 'slope_below_slide_curve', 'slope_below_slide_shape',
-      'relax_time', 'relax_time_slide', 'relax_time_slide_curve', 'relax_time_slide_shape'
-    ]
-
-    @context['octaver'] = @context['level'] + [
-      'oct1_amp', 'oct1_amp_slide', 'oct1_amp_slide_curve', 'oct1_amp_slide_shape',
-      'oct1_interval', 'oct1_interval_slide', 'oct1_interval_slide_curve', 'oct1_interval_slide_shape',
-      'oct2_amp', 'oct2_amp_slide', 'oct2_amp_slide_curve', 'oct2_amp_slide_shape',
-      'oct3_amp', 'oct3_amp_slide', 'oct3_amp_slide_curve', 'oct3_amp_slide_shape'
-    ]
-
-    @context['ring_mod'] = @context['level'] + [
-      'freq', 'freq_slide', 'freq_slide_curve', 'freq_slide_shape',
-      'mod_amp', 'mod_amp_slide', 'mod_amp_slide_curve', 'mod_amp_slide_shape'
-    ]
-
-    @context['bpf'] = @context['level'] + @context['base_res'] + [
-      'centre', 'centre_slide', 'centre_slide_curve', 'centre_slide_shape'
-    ]
-    @context['rbpf'] = @context['bpf']
-    @context['nbpf'] = @context['bpf']
-    @context['nrbpf'] = @context['bpf']
-
-    @context['lpf'] = @context['level'] + @context['base_filter'] + @context['base_res'] + @context['base_mix']
-    @context['rlpf'] = @context['lpf']
-    @context['nlpf'] = @context['lpf']
-    @context['nrlpf'] = @context['lpf']
-    @context['hpf'] = @context['lpf']
-    @context['nhpf'] = @context['lpf']
-    @context['rhpf'] = @context['lpf']
-    @context['nrhpf'] = @context['lpf']
-
-    @context['normaliser'] = @context['level'] + [
-      'level', 'level_slide', 'level_slide_curve', 'level_slide_curve_shape'
-    ]
-
-    @context['distortion'] = @context['level'] + [
-      'distort', 'distort_slide', 'distort_slide_curve', 'distort_slide_shape'
-    ]
-
-    @context['pan'] = @context['level'] + [
-      'pan', 'pan_slide', 'pan_slide_curve', 'pan_slide_shape'
-    ]
-
-    # Oddball helpers
-    @context['spread'] = [ 'rotate' ]
+    # The FX
+    @fx = [":bitcrusher", ":krush", ":reverb", ":gverb", ":level", ":mono", ":echo", ":slicer", ":panslicer", ":wobble", ":ixi_techno", ":compressor", ":whammy", ":rlpf", ":nrlpf", ":rhpf", ":nrhpf", ":hpf", ":nhpf", ":lpf", ":nlpf", ":normaliser", ":distortion", ":pan", ":bpf", ":nbpf", ":rbpf", ":nrbpf", ":band_eq", ":tanh", ":pitch_shift", ":ring_mod", ":octaver", ":vowel", ":flanger", ":eq", ":tremolo", ":record", ":sound_out", ":sound_out_stereo"]
 
   end
 
