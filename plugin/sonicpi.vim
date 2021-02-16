@@ -68,6 +68,14 @@ function! s:SonicPiSendBuffer()
   execute "silent w !" . g:sonicpi_command . " " . g:sonicpi_send
 endfunction
 
+function! s:SonicPiSendSelection()
+  execute "silent '<,'>w !" . g:sonicpi_command . " " . g:sonicpi_send
+endfunction
+
+function! s:SonicPiSendLine()
+  execute "silent .w !" . g:sonicpi_command . " " . g:sonicpi_send
+endfunction
+
 function! s:SonicPiStop()
   execute "silent !" . g:sonicpi_command . " " . g:sonicpi_stop
   if g:vim_redraw
@@ -77,10 +85,14 @@ endfunction
 
 " Export public API
 command! -nargs=0 SonicPiSendBuffer call s:SonicPiSendBuffer()
+command! -nargs=0 SonicPiSendSelection call s:SonicPiSendSelection()
+command! -nargs=0 SonicPiSendLine call s:SonicPiSendLine()
 command! -nargs=0 SonicPiStop call s:SonicPiStop()
 
 " Set keymaps in Normal mode
 function! s:load_keymaps()
   nnoremap <leader>r :SonicPiSendBuffer<CR>
+  nnoremap <leader>e :SonicPiSendSelection<CR>
+  nnoremap <leader>E :SonicPiSendLine<CR>
   nnoremap <leader>S :SonicPiStop<CR>
 endfunction
