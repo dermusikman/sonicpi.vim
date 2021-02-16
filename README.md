@@ -17,6 +17,10 @@ The plugin enables itself when Sonic Pi is running and the Ruby filetype is init
 
 * `<leader>S` - send stop message to sonicpi
 
+* `<leader>e` - send last selection to sonicpi
+
+* `<leader>E` - send current line to sonicpi
+
 * Contextual autocompletion of Sonic Pi terms with omnicomplete (`<C-x><C-o>` by default). That is, if you have `synth :zawa,` in the line, omnicomplete will provide parameter names for `:zawa`, et al!
 
 * Extension of Ruby syntax to include Sonic Pi terms
