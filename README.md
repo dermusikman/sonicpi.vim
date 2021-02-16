@@ -1,6 +1,9 @@
 # sonicpi.vim
 
-[![Join the chat at https://gitter.im/dermusikman/sonicpi.vim](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dermusikman/sonicpi.vim?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Everything works, and I am so grateful that this plugin has met a need for the community, but I am not actively working on features. I accept pull requests and invite contributions, but also wish to make you aware of [vim-sonic-pi](https://github.com/lilyinstarlight/vim-sonic-pi), which is a more active fork with cool additional features, and supports newer features offered in recent releases of [Sonic Pi](http://www.sonic-pi.net/).
+
+
+#### Requirements
 
 The sonicpi vim plugin requires the following:
 
