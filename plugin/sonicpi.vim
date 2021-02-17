@@ -64,8 +64,8 @@ function! s:load_syntax()
   runtime! syntax/sonicpi.vim
 endfunction
 
-function! s:SonicPiSendBuffer()
-  execute "silent w !" . g:sonicpi_command . " " . g:sonicpi_send
+function! s:SonicPiSendBuffer() range
+  execute "silent " . a:firstline . "," . a:lastline . " w !" . g:sonicpi_command . " " . g:sonicpi_send
 endfunction
 
 function! s:SonicPiStop()
@@ -76,11 +76,12 @@ function! s:SonicPiStop()
 endfunction
 
 " Export public API
-command! -nargs=0 SonicPiSendBuffer call s:SonicPiSendBuffer()
+command! -nargs=0 -range=% SonicPiSendBuffer let view = winsaveview() | <line1>,<line2>call s:SonicPiSendBuffer() | call winrestview(view)
 command! -nargs=0 SonicPiStop call s:SonicPiStop()
 
 " Set keymaps in Normal mode
 function! s:load_keymaps()
   nnoremap <leader>r :SonicPiSendBuffer<CR>
+  vnoremap <leader>r :SonicPiSendBuffer<CR>
   nnoremap <leader>S :SonicPiStop<CR>
 endfunction
