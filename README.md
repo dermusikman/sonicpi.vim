@@ -16,7 +16,7 @@ The sonicpi vim plugin requires the following:
 
 The plugin enables itself when Sonic Pi is running and the Ruby filetype is initiated (`let g:sonicpi_enabled = 0` to disable), and provides the following features:
 
-* `<leader>r` - send buffer to sonicpi
+* `<leader>r` - send current buffer or visual mode line selection to sonicpi
 
 * `<leader>S` - send stop message to sonicpi
 
